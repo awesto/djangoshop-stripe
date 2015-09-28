@@ -16,3 +16,7 @@ SHOP_STRIPE = {
     'PURCHASE_DESCRIPTION': _("Thanks for purchasing at MyShop"),
 }
 ```
+
+In ``settings.py`` add ``'shop_stripe.payment.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
+
+In ``settings.py`` add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
