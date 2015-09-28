@@ -17,6 +17,6 @@ SHOP_STRIPE = {
 }
 ```
 
-In ``settings.py`` add ``'shop_stripe.payment.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
+In ``settings.py`` add ``'shop_stripe.modifiers.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
 
 In ``settings.py`` add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.

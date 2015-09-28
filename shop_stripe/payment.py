@@ -2,17 +2,14 @@
 from __future__ import unicode_literals
 import json
 import stripe
-from datetime import date
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.core.exceptions import ImproperlyConfigured
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.utils.translation import ugettext_lazy as _
-from django.utils.six.moves.urllib.parse import urljoin
 from shop.models.cart import CartModel
 from shop.models.order import BaseOrder, OrderModel, OrderPayment
 from shop.payment.base import PaymentProvider
-from shop.modifiers.base import PaymentModifier
 from django_fsm import transition
 
 
@@ -71,34 +68,6 @@ class StripePayment(PaymentProvider):
             return HttpResponseBadRequest(charge)
         except (KeyError, stripe.error.CardError) as err:
             return HttpResponseBadRequest(err)
-
-
-class StripePaymentModifier(PaymentModifier):
-    identifier = StripePayment.namespace
-    payment_provider = StripePayment()
-    commision_percentage = 3
-
-    def get_choice(self):
-        return (self.identifier, _("Credit Card"))
-
-    def add_extra_cart_row(self, cart, request):
-        from decimal import Decimal
-        from shop.rest.serializers import ExtraCartRow
-
-        if not self.is_active(cart) or not self.commision_percentage:
-            return
-        amount = cart.subtotal * Decimal(self.commision_percentage / 100.0)
-        instance = {'label': _("+ {}% handling fees").format(self.commision_percentage), 'amount': amount}
-        cart.extra_rows[self.identifier] = ExtraCartRow(instance)
-        cart.total += amount
-
-    def update_render_context(self, context):
-        super(StripePaymentModifier, self).update_render_context(context)
-        today = date.today()
-        context['payment_modifiers']['month_range'] = \
-            [(date(2000, m, 1).strftime('%m'), date(2000, m, 1).strftime('%b')) for m in range(1, 13)]
-        context['payment_modifiers']['years_range'] = range(today.year, today.year + 11)
-        context['payment_modifiers']['stripe_payment'] = True
 
 
 class OrderWorkflowMixin(object):
