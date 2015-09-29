@@ -47,6 +47,8 @@ class StripePayment(PaymentProvider):
     def charge_view(cls, request):
         """
         Use the Stripe token from the request and charge immediately.
+        This view is invoked by the Javascript function `scope.charge()` delivered
+        by `get_payment_request`.
         """
         stripe.api_key = settings.SHOP_STRIPE['APIKEY']
         body = json.loads(request.body)
@@ -61,7 +63,7 @@ class StripePayment(PaymentProvider):
             )
             if charge['status'] == 'succeeded':
                 order = OrderModel.objects.create_from_cart(cart, request)
-                order.add_charge(charge)
+                order.add_stripe_payment(charge)
                 order.save()
                 response = {'thank_you_url': OrderModel.objects.get_latest_url()}
                 return HttpResponse(json.dumps(response), content_type='application/json;charset=UTF-8')
@@ -81,7 +83,7 @@ class OrderWorkflowMixin(object):
         super(OrderWorkflowMixin, self).__init__(*args, **kwargs)
 
     @transition(field='status', source=['created'], target='charge_credit_card')
-    def add_charge(self, charge):
+    def add_stripe_payment(self, charge):
         payment = OrderPayment(order=self, transaction_id=charge['id'], payment_method=StripePayment.namespace)
         assert payment.amount.get_currency() == charge['currency'].upper(), "Currency mismatch"
         payment.amount = charge['amount']
