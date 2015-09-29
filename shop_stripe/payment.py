@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from decimal import Decimal
 import json
 import stripe
 from django.conf import settings
@@ -86,6 +87,5 @@ class OrderWorkflowMixin(object):
     def add_stripe_payment(self, charge):
         payment = OrderPayment(order=self, transaction_id=charge['id'], payment_method=StripePayment.namespace)
         assert payment.amount.get_currency() == charge['currency'].upper(), "Currency mismatch"
-        payment.amount = charge['amount']
-        payment.amount /= payment.amount.subunits
+        payment.amount = payment.amount.__class__(Decimal(charge['amount']) / payment.amount.subunits)
         payment.save()
