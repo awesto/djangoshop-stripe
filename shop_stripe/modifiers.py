@@ -9,7 +9,7 @@ from .payment import StripePayment
 class StripePaymentModifier(PaymentModifier):
     identifier = StripePayment.namespace
     payment_provider = StripePayment()
-    commision_percentage = 3
+    commision_percentage = None
 
     def get_choice(self):
         return (self.identifier, _("Credit Card"))
