@@ -21,7 +21,7 @@ class StripePaymentModifier(PaymentModifier):
         if not self.is_active(cart) or not self.commision_percentage:
             return
         amount = cart.subtotal * Decimal(self.commision_percentage / 100.0)
-        instance = {'label': _("+ {}% handling fees").format(self.commision_percentage), 'amount': amount}
+        instance = {'label': _("+ {}% handling fee").format(self.commision_percentage), 'amount': amount}
         cart.extra_rows[self.identifier] = ExtraCartRow(instance)
         cart.total += amount
 

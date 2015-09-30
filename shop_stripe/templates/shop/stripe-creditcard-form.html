@@ -7,9 +7,10 @@
 {% addtoblock "shop-ng-config" %}['stripeProvider', function(stripeProvider) { stripeProvider.setPublishableKey('{{ SHOP_STRIPE_PUBKEY }}'); }]{% endaddtoblock %}
 
 <div class="panel panel-default" ng-show="data.payment_method.payment_modifier==='stripe-payment'" ng-cloak>
-	<div class="panel-heading" style="padding-top: 0; padding-bottom: 0;">
-		<h2 class="panel-title" style="line-height: 43px;">
-			<img class="pull-right" src="{% static 'icons/accepted_c22e0.png' %}" width="207" height="43">Payment
+	<div class="panel-heading">
+		<h2 class="panel-title">
+			{% trans "Payment" %}
+			<img class="pull-right" src="{% static 'shop/icons/stripe-solid-light.png' %}" srcset="{% static 'shop/icons/stripe-solid-light.png' %} 1x, {% static 'shop/icons/stripe-solid-light@2x.png' %} 2x, {% static 'shop/icons/stripe-solid-light@3x.png' %} 3x" width="119" height="26" style="margin-top: -4px;">
 		</h2>
 	</div>
 	<div class="panel-body">
@@ -61,7 +62,7 @@
 					</div>
 				</div>
 				<div class="col-xs-4 col-md-3 pull-right">
-					<label for="cvc">{% trans "Code" %}</label>
+					<label for="cvc">{% trans "Security Code" %}</label>
 					<div class="form-group">
 						<input type="password" class="form-control" name="cvc" placeholder="CVC" ng-model="payment.card.cvc" />
 					</div>
