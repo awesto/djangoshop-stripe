@@ -75,7 +75,7 @@ class StripePayment(PaymentProvider):
 
 class OrderWorkflowMixin(object):
     TRANSITION_TARGETS = {
-        'charge_credit_card': _("Paid by Credit Card"),
+        'paid_with_stripe': _("Paid using Stripe"),
     }
 
     def __init__(self, *args, **kwargs):
@@ -89,3 +89,8 @@ class OrderWorkflowMixin(object):
         assert payment.amount.get_currency() == charge['currency'].upper(), "Currency mismatch"
         payment.amount = payment.amount.__class__(Decimal(charge['amount']) / payment.amount.subunits)
         payment.save()
+
+    @transition(field='status', source='paid_with_stripe',
+        custom=dict(admin=True, button_name=_("Acknowledge Payment")))
+    def acknowledge_stripe_payment(self):
+        self.acknowledge_payment()
