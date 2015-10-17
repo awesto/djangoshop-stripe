@@ -1,7 +1,7 @@
 {% load static i18n sekizai_tags %}
 
 {% addtoblock "ext-js" %}<script src="https://js.stripe.com/v2/" type="text/javascript"></script>{% endaddtoblock %}
-{% addtoblock "js" %}<script src="{% static 'angular-stripe/release/angular-stripe.js' %}" type="text/javascript"></script>{% endaddtoblock %}
+{% addtoblock "js" %}<script src="{% static 'bower_components/angular-stripe/release/angular-stripe.js' %}" type="text/javascript"></script>{% endaddtoblock %}
 {% addtoblock "js" %}<script src="{% static 'shop/js/stripe.js' %}" type="text/javascript"></script>{% endaddtoblock %}
 {% addtoblock "shop-ng-requires" %}django.shop.stripe{% endaddtoblock %}
 {% addtoblock "shop-ng-config" %}['stripeProvider', function(stripeProvider) { stripeProvider.setPublishableKey('{{ SHOP_STRIPE_PUBKEY }}'); }]{% endaddtoblock %}
