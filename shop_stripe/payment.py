@@ -83,7 +83,7 @@ class OrderWorkflowMixin(object):
             raise ImproperlyConfigured('OrderWorkflowMixin is not of type BaseOrder')
         super(OrderWorkflowMixin, self).__init__(*args, **kwargs)
 
-    @transition(field='status', source=['created'], target='charge_credit_card')
+    @transition(field='status', source=['created'], target='paid_with_stripe')
     def add_stripe_payment(self, charge):
         payment = OrderPayment(order=self, transaction_id=charge['id'], payment_method=StripePayment.namespace)
         assert payment.amount.get_currency() == charge['currency'].upper(), "Currency mismatch"
