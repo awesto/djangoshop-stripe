@@ -90,7 +90,10 @@ class OrderWorkflowMixin(object):
         payment.amount = payment.amount.__class__(Decimal(charge['amount']) / payment.amount.subunits)
         payment.save()
 
-    @transition(field='status', source='paid_with_stripe',
+    def is_fully_paid(self):
+        return super(OrderWorkflowMixin, self).is_fully_paid()
+
+    @transition(field='status', source='paid_with_stripe', conditions=[is_fully_paid],
         custom=dict(admin=True, button_name=_("Acknowledge Payment")))
     def acknowledge_stripe_payment(self):
         self.acknowledge_payment()
