@@ -58,7 +58,7 @@ class StripePayment(PaymentProvider):
         try:
             charge = stripe.Charge.create(
                 amount=cart.total.as_integer(),
-                currency=cart.total.get_currency(),
+                currency=cart.total.currency,
                 source=body['token'],
                 description=settings.SHOP_STRIPE['PURCHASE_DESCRIPTION']
             )
@@ -86,7 +86,7 @@ class OrderWorkflowMixin(object):
     @transition(field='status', source=['created'], target='paid_with_stripe')
     def add_stripe_payment(self, charge):
         payment = OrderPayment(order=self, transaction_id=charge['id'], payment_method=StripePayment.namespace)
-        assert payment.amount.get_currency() == charge['currency'].upper(), "Currency mismatch"
+        assert payment.amount.currency == charge['currency'].upper(), "Currency mismatch"
         payment.amount = payment.amount.__class__(Decimal(charge['amount']) / payment.amount.subunits)
         payment.save()
 
