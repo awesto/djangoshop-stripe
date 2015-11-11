@@ -47,7 +47,7 @@
 					<div class="form-group">
 						<div class="col-xs-6" style="padding-left: 0;">
 							<select class="form-control" name="exp_month" ng-model="payment.card.exp_month">
-								<option selected="selected" disabled="disabled">{% trans "Month" %}</option>
+								<option value="" selected="selected" disabled="disabled">{% trans "Month" %}</option>
 							{% for mm, month_name in payment_modifiers.month_range %}
 								<option value="{{ mm }}">{{ mm }} / {{ month_name }}</option>
 							{% endfor %}
@@ -55,7 +55,7 @@
 						</div>
 						<div class="col-xs-6" style="padding-left: 0;">
 							<select class="form-control" name="exp_year" ng-model="payment.card.exp_year">
-								<option selected="selected" disabled="disabled">{% trans "Year" %}</option>
+								<option value="" selected="selected" disabled="disabled">{% trans "Year" %}</option>
 							{% for year in payment_modifiers.years_range %}
 								<option value="{{ year }}">{{ year }}</option>
 							{% endfor %}
