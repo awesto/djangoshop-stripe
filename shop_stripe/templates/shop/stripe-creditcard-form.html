@@ -7,12 +7,14 @@
 {% addtoblock "shop-ng-config" %}['stripeProvider', function(stripeProvider) { stripeProvider.setPublishableKey('{{ SHOP_STRIPE_PUBKEY }}'); }]{% endaddtoblock %}
 
 <div class="panel panel-default" ng-show="data.payment_method.payment_modifier==='stripe-payment'" ng-cloak>
+{% block panel_heading %}
 	<div class="panel-heading">
 		<h2 class="panel-title">
 			{% trans "Payment" %}
-			<img class="pull-right" src="{% static 'shop/icons/stripe-solid-light.png' %}" srcset="{% static 'shop/icons/stripe-solid-light.png' %} 1x, {% static 'shop/icons/stripe-solid-light@2x.png' %} 2x, {% static 'shop/icons/stripe-solid-light@3x.png' %} 3x" width="119" height="26" style="margin-top: -4px;">
+			<img class="pull-right" src="{% static 'shop/icons/stripe-solid-dark.png' %}" srcset="{% static 'shop/icons/stripe-solid-dark.png' %} 1x, {% static 'shop/icons/stripe-solid-dark@2x.png' %} 2x, {% static 'shop/icons/stripe-solid-dark@3x.png' %} 3x" width="119" height="26" style="margin-top: -4px;">
 		</h2>
 	</div>
+{% endblock panel_heading %}
 	<div class="panel-body">
 		<form role="form" stripe-card-form novalidate>
 			<div class="row">
