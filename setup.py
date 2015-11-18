@@ -26,7 +26,7 @@ setup(
     classifiers=CLASSIFIERS,
     install_requires=[
         'Django>=1.7',
-        'django-shop>=0.3.0',
+        #'django-shop>=0.3.0',
         'stripe>=1.26.0',
     ],
     packages=find_packages(),
