@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-12 22:35+0200\n"
+"POT-Creation-Date: 2015-11-26 11:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,33 +27,37 @@ msgid "+ {}% handling fee"
 msgstr "+ {}% Bearbeitungsgebühr"
 
 #: payment.py:78
-msgid "Paid by Credit Card"
-msgstr "Bezahlt mittels Kreditkarte"
+msgid "Paid using Stripe"
+msgstr "Mit Stripe bezahlt"
 
-#: templates/shop/stripe-creditcard-form.html:12
+#: payment.py:97
+msgid "Acknowledge Payment"
+msgstr "Bezahlung bestätigt"
+
+#: templates/shop/stripe-creditcard-form.html:13
 msgid "Payment"
 msgstr "Bezahlung"
 
-#: templates/shop/stripe-creditcard-form.html:27
+#: templates/shop/stripe-creditcard-form.html:29
 msgid "Card Holder"
 msgstr "Karteninhaber"
 
-#: templates/shop/stripe-creditcard-form.html:34
+#: templates/shop/stripe-creditcard-form.html:36
 msgid "Creditcard Number"
 msgstr "Kreditkartennummer"
 
-#: templates/shop/stripe-creditcard-form.html:44
+#: templates/shop/stripe-creditcard-form.html:46
 msgid "Expiration Date"
 msgstr "Gültig bis"
 
-#: templates/shop/stripe-creditcard-form.html:48
+#: templates/shop/stripe-creditcard-form.html:50
 msgid "Month"
 msgstr "Monat"
 
-#: templates/shop/stripe-creditcard-form.html:56
+#: templates/shop/stripe-creditcard-form.html:58
 msgid "Year"
 msgstr "Jahr"
 
-#: templates/shop/stripe-creditcard-form.html:65
+#: templates/shop/stripe-creditcard-form.html:67
 msgid "Security Code"
 msgstr "Sicherheitscode"
