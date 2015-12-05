@@ -16,11 +16,11 @@ CLASSIFIERS = [
 setup(
     author="Jacob Rief",
     author_email="jacob.rief@gmail.com",
-    name='django-shop-stripe',
+    name='djangoshop-stripe',
     version=shop_stripe.__version__,
     description='Stripe Payment Provider Integration for django-shop',
     long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
-    url='https://github.com/jrief/django-shop-stripe',
+    url='https://github.com/jrief/djangoshop-stripe',
     license='MIT License',
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
