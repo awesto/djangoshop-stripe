@@ -1,6 +1,15 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 from setuptools import setup, find_packages
 import os
 import shop_stripe
+try:
+    from pypandoc import convert
+except ImportError:
+    def convert(filename, fmt):
+        with open(filename) as fd:
+            return fd.read()
 
 CLASSIFIERS = [
     'Environment :: Web Environment',
@@ -19,14 +28,12 @@ setup(
     name='djangoshop-stripe',
     version=shop_stripe.__version__,
     description='Stripe Payment Provider Integration for django-shop',
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README.md')).read(),
+    long_description=convert('README.md', 'rst'),
     url='https://github.com/jrief/djangoshop-stripe',
     license='MIT License',
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
     install_requires=[
-        'Django>=1.7',
-        #'django-shop>=0.3.0',
         'stripe>=1.26.0',
     ],
     packages=find_packages(),

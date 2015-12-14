@@ -5,9 +5,12 @@ This integrates Stripe for django-shop version 0.3 and above.
 
 ## Installation
 
-In ``settings.py`` add ``'shop_stripe'`` to ``INSTALLED_APPS``.
+In ``settings.py`` of your project
 
-In ``settings.py`` add
+Add ``'shop_stripe'`` to ``INSTALLED_APPS``.
+
+At https:://stripe.com/ create an account and apply for a public/private key-pair. Then add these
+keys:
 
 ```
 SHOP_STRIPE = {
@@ -17,6 +20,6 @@ SHOP_STRIPE = {
 }
 ```
 
-In ``settings.py`` add ``'shop_stripe.modifiers.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
+Add ``'shop_stripe.modifiers.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
 
-In ``settings.py`` add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
+Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
