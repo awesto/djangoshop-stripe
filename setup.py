@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from setuptools import setup, find_packages
-import os
 import shop_stripe
 try:
     from pypandoc import convert
