@@ -50,7 +50,8 @@ shopStripeModule.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', 'd
 			}
 
 			$scope.prepare = function(deferred) {
-				if (angular.isString($scope.data.payment_method.payment_data.token_id)) {
+				if ($scope.data.payment_method.payment_modifier !== 'stripe-payment'
+				  || angular.isString($scope.data.payment_method.payment_data.token_id)) {
 					deferred.resolve();
 				} else {
 					createToken(deferred).then(function(token) {
