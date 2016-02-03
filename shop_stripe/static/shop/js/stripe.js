@@ -1,11 +1,12 @@
 (function() {
 "use strict";
 
-var shopStripe = angular.module('django.shop.stripe', ['ng.django.urls', 'angular-stripe']);
+var shopStripeModule = angular.module('django.shop.stripe', ['ng.django.urls', 'angular-stripe', 'django.shop.dialogs']);
 
-shopStripe.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', function($http, djangoUrl, stripe) {
-	var chargeCreditcardURL = djangoUrl.reverse('shop:stripe-payment:charge');
-
+// Directive <ANY stripe-card-form>
+// Must be added to the form containing the CC input fields
+shopStripeModule.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', 'djangoShop',
+                           function($http, djangoUrl, stripe, djangoShop) {
 	// iterate over sibling scopes to find the scope object holding the customer's data
 	function findCustomerScope(scope) {
 		while (scope && scope.hasOwnProperty('data')) {
@@ -23,32 +24,52 @@ shopStripe.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', function
 		controller: ['$scope', function($scope) {
 			var customer = findCustomerScope($scope);
 			if (customer) {
-				$scope.payment = {card: {name: [
-				    customer.first_name ? customer.first_name : '',
-				    customer.last_name ? customer.last_name : ''].join(' ')
-				}};
+				$scope.payment = {
+					card: {name: [
+					    customer.first_name ? customer.first_name : '',
+					    customer.last_name ? customer.last_name : ''].join(' ')
+					}
+				};
+			}
+			if (!angular.isObject($scope.data.payment_method)) {
+				$scope.data.payment_method = {};
 			}
 
-			$scope.charge = function() {
+			// pass data from Stripe Card Form to PSP and fetch the token
+			function createToken(deferred) {
 				$scope.dismiss();
-				// pass gathered data to Stripe and fetch the token
-				var promise = stripe.card.createToken($scope.payment.card);
-				return promise.then(function(token) {
-					var payment = angular.copy($scope.payment);
+				stripe.card.createToken($scope.payment.card).then(function(token) {
 					console.log('token created for card ending in ', token.card.last4);
-					payment.card = void 0;
-					payment.token = token.id;
-					return $http.post(chargeCreditcardURL, payment);
+					deferred.resolve(token);
 				}, function(error) {
-					console.error(error.code);
+					console.error(error.message);
 					$scope.stripe_error_message = error.message;
-					return promise;
+					deferred.reject(error.code);
 				});
+				return deferred.promise;
+			}
+
+			$scope.prepare = function(deferred) {
+				if (angular.isString($scope.data.payment_method.payment_data.token_id)) {
+					deferred.resolve();
+				} else {
+					createToken(deferred).then(function(token) {
+						$scope.data.payment_method.payment_data = {token_id: token.id};
+					});
+				}
+				return deferred.promise;
+			};
+
+			$scope.resetStripeToken = function() {
+				$scope.data.payment_method.payment_data = {};
+				$scope.dismiss();
 			};
 
 			$scope.dismiss = function() {
 				$scope.stripe_error_message = $scope.stripe_success_message = null;
 			};
+
+			$scope.resetStripeToken();
 		}]
 	};
 }]);
