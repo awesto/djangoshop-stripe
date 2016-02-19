@@ -23,3 +23,11 @@ SHOP_STRIPE = {
 Add ``'shop_stripe.modifiers.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
 
 Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
+
+## Changes
+
+### 0.1.2
+Adopted for asynchronous payments as available in django-shop-0.9.0rc2
+
+### 0.1.1
+Initial working release
