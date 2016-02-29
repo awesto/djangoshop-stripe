@@ -1,7 +1,7 @@
 (function() {
 "use strict";
 
-var shopStripeModule = angular.module('django.shop.stripe', ['ng.django.urls', 'angular-stripe', 'django.shop.dialogs']);
+var shopStripeModule = angular.module('django.shop.stripe', ['djng.urls', 'angular-stripe', 'django.shop.dialogs']);
 
 // Directive <ANY stripe-card-form>
 // Must be added to the form containing the CC input fields
