@@ -26,8 +26,11 @@ Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
 
 ## Changes
 
+### 0.1.3
+In django-angular the naming scheme changed. Reflect these changes.
+
 ### 0.1.2
-Adopted for asynchronous payments as available in django-shop-0.9.0rc2
+Adopted for asynchronous payments as available in django-shop-0.9.0rc2.
 
 ### 0.1.1
-Initial working release
+Initial working release.
