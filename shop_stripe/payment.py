@@ -32,7 +32,6 @@ class StripePayment(PaymentProvider):
             js_expression = '$window.location.href="{}";'.format(thank_you_url)
             return js_expression
         except (KeyError, stripe.error.StripeError) as err:
-            print err
             raise ValidationError(err)
 
     def charge(self, cart, request):
