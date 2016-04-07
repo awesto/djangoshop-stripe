@@ -26,6 +26,9 @@ Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
 
 ## Changes
 
+### 0.1.4
+Fixed Python3 compatibility issue.
+
 ### 0.1.3
 In django-angular the naming scheme changed. Reflect these changes.
 
