@@ -1,9 +1,13 @@
 # Stripe Payment Provider Integration for django-shop
 
-This integrates Stripe for django-shop version 0.3 and above.
+This integrates Stripe for django-shop version 0.9 and above.
 
 
 ## Installation
+
+```
+pip install djangoshop-stripe
+```
 
 In ``settings.py`` of your project
 
@@ -20,11 +24,23 @@ SHOP_STRIPE = {
 }
 ```
 
-Add ``'shop_stripe.modifiers.StripePaymentModifier'`` to ``SHOP_CART_MODIFIERS``.
+Add ``'shop_stripe.modifiers.StripePaymentModifier'`` to the list of ``SHOP_CART_MODIFIERS``.
 
-Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to ``SHOP_ORDER_WORKFLOWS``.
+Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to the list of ``SHOP_ORDER_WORKFLOWS``.
+
+Locate the projects's folder ``node_modules``; if unsure consult your settings variable
+``STATICFILES_DIRS``. Change into it's parent folder and invoke:
+
+```
+npm install angular-stripe --save
+```
 
 ## Changes
+
+### 0.2.0
+* Replaced ``bower`` against ``npm``.
+* Since Ben Drucker is unwilling to provide an installable AngularJS module,
+  it is build and shipped with **djangoshop-stripe**.
 
 ### 0.1.4
 Fixed Python3 compatibility issue.
