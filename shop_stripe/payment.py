@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from decimal import Decimal
 import stripe
 from django.conf import settings
-from django.conf.urls import patterns
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.exceptions import ValidationError
@@ -18,9 +17,6 @@ class StripePayment(PaymentProvider):
     Provides a payment service for Stripe.
     """
     namespace = 'stripe-payment'
-
-    def get_urls(self):
-        return patterns('')
 
     def get_payment_request(self, cart, request):
         """
