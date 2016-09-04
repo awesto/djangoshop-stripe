@@ -6,8 +6,10 @@ import shop_stripe
 try:
     from pypandoc import convert
 except ImportError:
+    import io
+
     def convert(filename, fmt):
-        with open(filename) as fd:
+        with io.open(filename, encoding='utf-8') as fd:
             return fd.read()
 
 CLASSIFIERS = [
@@ -33,7 +35,7 @@ setup(
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
     install_requires=[
-        'stripe>=1.26.0',
+        'stripe>=1.37.0',
     ],
     packages=find_packages(),
     include_package_data=True,
