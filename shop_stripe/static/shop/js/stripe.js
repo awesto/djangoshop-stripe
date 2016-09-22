@@ -1,11 +1,11 @@
 (function() {
 "use strict";
 
-var shopStripeModule = angular.module('django.shop.stripe', ['djng.urls', 'angular-stripe', 'django.shop.dialogs']);
+var module = angular.module('django.shop.stripe', ['djng.urls', 'angular-stripe', 'django.shop.dialogs']);
 
 // Directive <ANY stripe-card-form>
 // Must be added to the form containing the CC input fields
-shopStripeModule.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', 'djangoShop',
+module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', 'djangoShop',
                            function($http, djangoUrl, stripe, djangoShop) {
 	// iterate over sibling scopes to find the scope object holding the customer's data
 	function findCustomerScope(scope) {
