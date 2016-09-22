@@ -37,6 +37,9 @@ npm install angular-stripe --save
 
 ## Changes
 
+### 0.2.1
+* django-shop now uses django-angular to load and initialize modules. Adopted here.
+
 ### 0.2.0
 * Replaced ``bower`` against ``npm``.
 * Since Ben Drucker is unwilling to provide an installable AngularJS module,
