@@ -31,9 +31,6 @@ Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to the list of ``SHOP_ORDER_WOR
 
 ## Changes
 
-### 0.2.1
-* django-shop now uses django-angular to load and initialize modules. Adopted here.
-
 ### 0.2.0
 * Replaced ``bower`` against ``npm``.
 * Replaced Sekizai block ``shop-ng-requires`` against ``ng-requires``.
