@@ -19,7 +19,7 @@ class StripePaymentModifier(PaymentModifier):
 
     def add_extra_cart_row(self, cart, request):
         from decimal import Decimal
-        from shop.rest.serializers import ExtraCartRow
+        from shop.serializers.cart import ExtraCartRow
 
         if not self.is_active(cart) or not self.commision_percentage:
             return
