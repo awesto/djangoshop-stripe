@@ -7,7 +7,7 @@
 {% addtoblock "ng-requires" %}django.shop.stripe{% endaddtoblock %}
 {% addtoblock "ng-config" %}['stripeProvider', function(stripeProvider) { stripeProvider.setPublishableKey('{{ SHOP_STRIPE_PUBKEY }}'); }]{% endaddtoblock %}
 
-<div class="panel panel-default" ng-show="data.payment_method.payment_modifier==='stripe-payment'" ng-cloak>
+<div class="panel panel-default">
 {% block panel_heading %}
 	<div class="panel-heading">
 		<h2 class="panel-title">

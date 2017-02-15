@@ -1,15 +1,25 @@
 # Stripe Payment Provider Integration for django-shop
 
-This integrates Stripe for django-shop version 0.9 and above.
+This integrates the Stripe for django-shop version 0.9 and above.
 
 
 ## Installation
 
+for django-shop version 0.9.x:
+
 ```
-pip install djangoshop-stripe
+pip install djangoshop-stripe==0.1.4
 ```
 
-In ``settings.py`` of your project
+for django-shop version 0.10.x:
+
+```
+pip install djangoshop-stripe==0.2.0
+```
+
+## Configuration
+
+In ``settings.py`` of the merchant's project:
 
 Add ``'shop_stripe'`` to ``INSTALLED_APPS``.
 
@@ -28,8 +38,15 @@ Add ``'shop_stripe.modifiers.StripePaymentModifier'`` to the list of ``SHOP_CART
 
 Add ``'shop_stripe.payment.OrderWorkflowMixin'`` to the list of ``SHOP_ORDER_WORKFLOWS``.
 
+Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
+``OPTIONS['context_processors']``
+
 
 ## Changes
+
+### 0.2.1
+* Adopted form django-SHOP version 0.10.
+* Stripe form template can be used by static views, rendering the PaymentMethodForm manually.
 
 ### 0.2.0
 * Replaced ``bower`` against ``npm``.
