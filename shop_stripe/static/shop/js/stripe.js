@@ -1,12 +1,12 @@
 (function() {
 "use strict";
 
-var module = angular.module('django.shop.stripe', ['djng.urls', 'angular-stripe', 'django.shop.dialogs']);
+var module = angular.module('django.shop.stripe', ['djng.urls', 'angular-stripe']);
 
 // Directive <ANY stripe-card-form>
 // Must be added to the form containing the CC input fields
-module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', 'djangoShop',
-                           function($http, djangoUrl, stripe, djangoShop) {
+module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe',
+                           function($http, djangoUrl, stripe) {
 	// iterate over sibling scopes to find the scope object holding the customer's data
 	function findCustomerScope(scope) {
 		while (scope && scope.hasOwnProperty('data')) {
@@ -42,7 +42,7 @@ module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe', 'djangoShop'
 					console.log('token created for card ending in ', token.card.last4);
 					deferred.resolve(token);
 				}, function(error) {
-					console.error(error.message);
+					console.log(error.message);
 					$scope.stripe_error_message = error.message;
 					deferred.reject(error.code);
 				});
