@@ -45,7 +45,7 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 ## Changes
 
 ### 0.2.1
-* Adopted form django-SHOP version 0.10.
+* Adopted for django-SHOP version 0.10. Do not use this version for Django-SHOP 0.9.x.
 * Stripe form template can be used by static views, rendering the PaymentMethodForm manually.
 
 ### 0.2.0
