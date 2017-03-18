@@ -44,6 +44,11 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.2.2
+* Replace ``{% addtoblock "ext-js" %}`` against ``{% addtoblock "js" %}``, since Django-SHOP 0.10.0
+  can handle externally referenced files as well.
+
+
 ### 0.2.1
 * Adopted for django-SHOP version 0.10. Do not use this version for Django-SHOP 0.9.x.
 * Stripe form template can be used by static views, rendering the PaymentMethodForm manually.
