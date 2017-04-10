@@ -35,7 +35,7 @@ setup(
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
     install_requires=[
-        'stripe>=1.37.0,<1.38',
+        'stripe>=1.53.0,<1.54',
     ],
     packages=find_packages(),
     include_package_data=True,
