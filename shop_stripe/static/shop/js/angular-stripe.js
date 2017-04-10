@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.angularStripe = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.angularStripe = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 (function (global){
 'use strict'
 
@@ -18,11 +18,102 @@ function main ($q) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],2:[function(require,module,exports){
+},{}],2:[function(_dereq_,module,exports){
 'use strict'
 
-var extend = require('xtend/mutable')
-var dot = require('dot-prop')
+var service = _dereq_('./service')
+
+module.exports = stripeProvider
+
+stripeProvider.$inject = ['Stripe']
+function stripeProvider (Stripe) {
+  if (!Stripe) throw new Error('Stripe must be available as window.Stripe')
+  this.setPublishableKey = Stripe.setPublishableKey
+  this.$get = service
+}
+
+},{"./service":3}],3:[function(_dereq_,module,exports){
+'use strict'
+
+var stripeAsPromised = _dereq_('stripe-as-promised')
+
+module.exports = factory
+
+factory.$inject = ['Stripe', '$q']
+function factory (Stripe, $q) {
+  return stripeAsPromised(Stripe, $q)
+}
+
+},{"stripe-as-promised":6}],4:[function(_dereq_,module,exports){
+(function (global){
+'use strict'
+
+var angular = (typeof window !== "undefined" ? window['angular'] : typeof global !== "undefined" ? global['angular'] : null)
+var provider = _dereq_('./provider')
+var Stripe = window.Stripe
+
+module.exports = angular.module('angular-stripe', [
+  _dereq_('angular-assert-q-constructor')
+])
+.constant('Stripe', Stripe)
+.provider('stripe', provider)
+.run(verifyQ)
+.name
+
+verifyQ.$inject = ['assertQConstructor']
+function verifyQ (assertQConstructor) {
+  assertQConstructor('angular-stripe: For Angular <= 1.2 support, first load https://github.com/bendrucker/angular-q-constructor')
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./provider":2,"angular-assert-q-constructor":1}],5:[function(_dereq_,module,exports){
+'use strict';
+
+function isObjOrFn(x) {
+	return (typeof x === 'object' || typeof x === 'function') && x !== null;
+}
+
+module.exports.get = function (obj, path) {
+	if (!isObjOrFn(obj) || typeof path !== 'string') {
+		return obj;
+	}
+
+	var pathArr = path.split('.');
+	pathArr.some(function (path, index) {
+		obj = obj[path];
+
+		if (obj === undefined) {
+			return true;
+		}
+	});
+
+	return obj;
+};
+
+module.exports.set = function (obj, path, value) {
+	if (!isObjOrFn(obj) || typeof path !== 'string') {
+		return;
+	}
+
+	var pathArr = path.split('.');
+	pathArr.forEach(function (path, index) {
+		if (!isObjOrFn(obj[path])) {
+			obj[path] = {};
+		}
+
+		if (index === pathArr.length - 1) {
+			obj[path] = value;
+		}
+
+		obj = obj[path];
+	});
+};
+
+},{}],6:[function(_dereq_,module,exports){
+'use strict'
+
+var extend = _dereq_('xtend/mutable')
+var dot = _dereq_('dot-prop')
 
 var asyncMethods = [
   'card.createToken',
@@ -79,50 +170,7 @@ function stripeResponseHandler (status, response) {
   }
 }
 
-},{"dot-prop":3,"xtend/mutable":4}],3:[function(require,module,exports){
-'use strict';
-
-function isObjOrFn(x) {
-	return (typeof x === 'object' || typeof x === 'function') && x !== null;
-}
-
-module.exports.get = function (obj, path) {
-	if (!isObjOrFn(obj) || typeof path !== 'string') {
-		return obj;
-	}
-
-	var pathArr = path.split('.');
-	pathArr.some(function (path, index) {
-		obj = obj[path];
-
-		if (obj === undefined) {
-			return true;
-		}
-	});
-
-	return obj;
-};
-
-module.exports.set = function (obj, path, value) {
-	if (!isObjOrFn(obj) || typeof path !== 'string') {
-		return;
-	}
-
-	var pathArr = path.split('.');
-	pathArr.forEach(function (path, index) {
-		if (!isObjOrFn(obj[path])) {
-			obj[path] = {};
-		}
-
-		if (index === pathArr.length - 1) {
-			obj[path] = value;
-		}
-
-		obj = obj[path];
-	});
-};
-
-},{}],4:[function(require,module,exports){
+},{"dot-prop":5,"xtend/mutable":7}],7:[function(_dereq_,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -141,53 +189,5 @@ function extend(target) {
     return target
 }
 
-},{}],5:[function(require,module,exports){
-'use strict'
-
-var service = require('./service')
-
-module.exports = stripeProvider
-
-stripeProvider.$inject = ['Stripe']
-function stripeProvider (Stripe) {
-  if (!Stripe) throw new Error('Stripe must be available as window.Stripe')
-  this.setPublishableKey = Stripe.setPublishableKey
-  this.$get = service
-}
-
-},{"./service":6}],6:[function(require,module,exports){
-'use strict'
-
-var stripeAsPromised = require('stripe-as-promised')
-
-module.exports = factory
-
-factory.$inject = ['Stripe', '$q']
-function factory (Stripe, $q) {
-  return stripeAsPromised(Stripe, $q)
-}
-
-},{"stripe-as-promised":2}],7:[function(require,module,exports){
-(function (global){
-'use strict'
-
-var angular = (typeof window !== "undefined" ? window['angular'] : typeof global !== "undefined" ? global['angular'] : null)
-var provider = require('./provider')
-var Stripe = window.Stripe
-
-module.exports = angular.module('angular-stripe', [
-  require('angular-assert-q-constructor')
-])
-.constant('Stripe', Stripe)
-.provider('stripe', provider)
-.run(verifyQ)
-.name
-
-verifyQ.$inject = ['assertQConstructor']
-function verifyQ (assertQConstructor) {
-  assertQConstructor('angular-stripe: For Angular <= 1.2 support, first load https://github.com/bendrucker/angular-q-constructor')
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./provider":5,"angular-assert-q-constructor":1}]},{},[7])(7)
+},{}]},{},[4])(4)
 });
