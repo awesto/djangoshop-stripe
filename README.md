@@ -44,6 +44,10 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.3.0
+* Upgrade to ``stripe`` version 1.53 and ``angular-stripe`` version 4.2.13.
+
+
 ### 0.2.2
 * Replace ``{% addtoblock "ext-js" %}`` against ``{% addtoblock "js" %}``, since Django-SHOP 0.10.0
   can handle externally referenced files as well.
