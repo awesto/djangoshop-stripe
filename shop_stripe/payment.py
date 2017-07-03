@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from decimal import Decimal
-
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
@@ -71,7 +69,7 @@ class OrderWorkflowMixin(object):
     def add_stripe_payment(self, charge):
         assert self.currency == charge['currency'].upper(), "Currency mismatch"
         Money = MoneyMaker(self.currency)
-        amount = Money(Decimal(charge['amount']) / Money.subunits)
+        amount = Money(charge['amount']) / Money.subunits
         OrderPayment.objects.create(order=self, amount=amount, transaction_id=charge['id'], payment_method=StripePayment.namespace)
 
     def is_fully_paid(self):
