@@ -2,14 +2,18 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal
-import stripe
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
-from rest_framework.exceptions import ValidationError
-from shop.models.order import BaseOrder, OrderModel, OrderPayment
-from shop.payment.base import PaymentProvider
+
 from django_fsm import transition
+from rest_framework.exceptions import ValidationError
+import stripe
+
+from shop.models.order import BaseOrder, OrderModel, OrderPayment
+from shop.money import MoneyMaker
+from shop.payment.base import PaymentProvider
 
 
 class StripePayment(PaymentProvider):
