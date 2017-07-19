@@ -2,14 +2,18 @@
 from __future__ import unicode_literals
 
 from decimal import Decimal
-import stripe
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
-from rest_framework.exceptions import ValidationError
-from shop.models.order import BaseOrder, OrderModel, OrderPayment
-from shop.payment.base import PaymentProvider
+
 from django_fsm import transition
+from rest_framework.exceptions import ValidationError
+import stripe
+
+from shop.models.order import BaseOrder, OrderModel, OrderPayment
+from shop.money import MoneyMaker
+from shop.payment.base import PaymentProvider
 
 
 class StripePayment(PaymentProvider):
@@ -65,10 +69,10 @@ class OrderWorkflowMixin(object):
 
     @transition(field='status', source=['created'], target='paid_with_stripe')
     def add_stripe_payment(self, charge):
-        payment = OrderPayment(order=self, transaction_id=charge['id'], payment_method=StripePayment.namespace)
-        assert payment.amount.currency == charge['currency'].upper(), "Currency mismatch"
-        payment.amount = payment.amount.__class__(Decimal(charge['amount']) / payment.amount.subunits)
-        payment.save()
+        assert self.currency == charge['currency'].upper(), "Currency mismatch"
+        Money = MoneyMaker(self.currency)
+        amount = Money(Decimal(charge['amount']) / Money.subunits)
+        OrderPayment.objects.create(order=self, amount=amount, transaction_id=charge['id'], payment_method=StripePayment.namespace)
 
     def is_fully_paid(self):
         return super(OrderWorkflowMixin, self).is_fully_paid()

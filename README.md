@@ -44,6 +44,9 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.3.1
+* Fixed: Compute amount in correct currency using Order object instead of defaulting.
+
 ### 0.3.0
 * Upgrade to ``stripe`` version 1.53 and ``angular-stripe`` version 4.2.13.
 
