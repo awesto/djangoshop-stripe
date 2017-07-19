@@ -44,6 +44,10 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.3.2
+* Fixed: Initialize scope of Angular directive `stripe-card-form` even for missing
+  `data` object.
+
 ### 0.3.1
 * Fixed: Compute amount in correct currency using Order object instead of defaulting.
 
