@@ -26,8 +26,8 @@ module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe',
 			if (customer) {
 				$scope.payment = {
 					card: {name: [
-					    customer.first_name ? customer.first_name : '',
-					    customer.last_name ? customer.last_name : ''].join(' ')
+						customer.first_name ? customer.first_name : '',
+						customer.last_name ? customer.last_name : ''].join(' ')
 					}
 				};
 			}
