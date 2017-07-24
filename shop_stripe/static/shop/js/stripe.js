@@ -26,13 +26,10 @@ module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe',
 			if (customer) {
 				$scope.payment = {
 					card: {name: [
-					    customer.first_name ? customer.first_name : '',
-					    customer.last_name ? customer.last_name : ''].join(' ')
+						customer.first_name ? customer.first_name : '',
+						customer.last_name ? customer.last_name : ''].join(' ')
 					}
 				};
-			}
-			if (!angular.isObject($scope.data.payment_method)) {
-				$scope.data.payment_method = {};
 			}
 
 			// pass data from Stripe Card Form to PSP and fetch the token
@@ -62,6 +59,7 @@ module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe',
 			};
 
 			$scope.resetStripeToken = function() {
+				$scope.data = $scope.data || {payment_method: {}};
 				$scope.data.payment_method.payment_data = {};
 				$scope.dismiss();
 			};
