@@ -44,6 +44,9 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.3.3, 0.3.4
+* Added compatibility on creating and populating Order for django-SHOP-0.11.
+
 ### 0.3.2
 * Fixed: Initialize scope of Angular directive `stripe-card-form` even for missing
   `data` object.

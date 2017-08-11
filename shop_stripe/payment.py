@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from distutils.version import LooseVersion
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
@@ -9,6 +11,7 @@ from django_fsm import transition
 from rest_framework.exceptions import ValidationError
 import stripe
 
+from shop import __version__ as SHOP_VERSION
 from shop.models.order import BaseOrder, OrderModel, OrderPayment
 from shop.money import MoneyMaker
 from shop.payment.base import PaymentProvider
@@ -40,17 +43,32 @@ class StripePayment(PaymentProvider):
         """
         stripe.api_key = settings.SHOP_STRIPE['APIKEY']
         token_id = cart.extra['payment_extra_data']['token_id']
-        charge = stripe.Charge.create(
-            amount=cart.total.as_integer(),
-            currency=cart.total.currency,
-            source=token_id,
-            description=settings.SHOP_STRIPE['PURCHASE_DESCRIPTION']
-        )
-        if charge['status'] == 'succeeded':
-            order = OrderModel.objects.create_from_cart(cart, request)
-            order.add_stripe_payment(charge)
-            order.save()
+        if LooseVersion(SHOP_VERSION) < LooseVersion('0.11'):
+            charge = stripe.Charge.create(
+                amount=cart.total.as_integer(),
+                currency=cart.total.currency,
+                source=token_id,
+                description=settings.SHOP_STRIPE['PURCHASE_DESCRIPTION']
+            )
+            if charge['status'] == 'succeeded':
+                order = OrderModel.objects.create_from_cart(cart, request)
+                order.add_stripe_payment(charge)
+                order.save()
         else:
+            order = OrderModel.objects.create_from_cart(cart, request)
+            charge = stripe.Charge.create(
+                amount=cart.total.as_integer(),
+                currency=cart.total.currency,
+                source=token_id,
+                transfer_group=order.get_number(),
+                description=settings.SHOP_STRIPE['PURCHASE_DESCRIPTION'],
+            )
+            if charge['status'] == 'succeeded':
+                order.populate_from_cart(cart, request)
+                order.add_stripe_payment(charge)
+                order.save()
+
+        if charge['status'] != 'succeeded':
             msg = "Stripe returned status '{status}' for id: {id}"
             raise stripe.error.InvalidRequestError(msg.format(**charge))
 
