@@ -65,9 +65,10 @@ class StripePayment(PaymentProvider):
                 description=settings.SHOP_STRIPE['PURCHASE_DESCRIPTION'],
             )
             if charge['status'] == 'succeeded':
-                order = OrderModel.objects.create_from_cart(cart, request)
+                order.populate_from_cart(cart, request)
                 order.add_stripe_payment(charge)
                 order.save()
+
         if charge['status'] != 'succeeded':
             msg = "Stripe returned status '{status}' for id: {id}"
             raise stripe.error.InvalidRequestError(msg.format(**charge))
