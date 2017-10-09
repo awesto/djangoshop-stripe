@@ -1,17 +1,16 @@
 (function() {
 "use strict";
 
-var module = angular.module('django.shop.stripe', ['djng.urls', 'angular-stripe']);
+var module = angular.module('django.shop.stripe', ['angular-stripe']);
 
 // Directive <ANY stripe-card-form>
 // Must be added to the form containing the CC input fields
-module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe',
-                           function($http, djangoUrl, stripe) {
+module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($http, $log, $q, stripe) {
 	// iterate over sibling scopes to find the scope object holding the customer's data
 	function findCustomerScope(scope) {
-		while (scope && scope.hasOwnProperty('data')) {
-			if (scope.data.hasOwnProperty('customer'))
-				return scope.data.customer;
+		while (scope) {
+			if (scope.hasOwnProperty('customer'))
+				return scope.customer;
 			scope = scope.$$prevSibling;
 		}
 		return null;
@@ -27,40 +26,36 @@ module.directive('stripeCardForm', ['$http', 'djangoUrl', 'stripe',
 				$scope.payment = {
 					card: {name: [
 						customer.first_name ? customer.first_name : '',
-						customer.last_name ? customer.last_name : ''].join(' ')
-					}
+						customer.last_name ? customer.last_name : ''
+					].join(' ')}
 				};
 			}
 
-			// pass data from Stripe Card Form to PSP and fetch the token
-			function createToken(deferred) {
+			$scope.prepare = function() {
 				$scope.dismiss();
-				stripe.card.createToken($scope.payment.card).then(function(token) {
-					console.log('token created for card ending in ', token.card.last4);
-					deferred.resolve(token);
-				}, function(error) {
-					console.log(error.message);
-					$scope.stripe_error_message = error.message;
-					deferred.reject(error.code);
-				});
-				return deferred.promise;
-			}
+				return function(response) {
+					var deferred;
+					if ($scope.payment_method.payment_modifier !== 'stripe-payment'
+					  || angular.isString($scope.payment_method.payment_data.token_id))
+						return $q.resolve(response);
 
-			$scope.prepare = function(deferred) {
-				if ($scope.data.payment_method.payment_modifier !== 'stripe-payment'
-				  || angular.isString($scope.data.payment_method.payment_data.token_id)) {
-					deferred.resolve();
-				} else {
-					createToken(deferred).then(function(token) {
-						$scope.data.payment_method.payment_data = {token_id: token.id};
+					// pass data from Stripe Card Form to PSP and fetch the token
+					deferred = $q.defer();
+					stripe.card.createToken($scope.payment.card).then(function(token) {
+						$log.log("Token created for card ending in ", token.card.last4);
+						$scope.payment_method.payment_data = {token_id: token.id};
+						$scope.payment.card = {name: $scope.payment.card.name};  // forget credit card number immediately
+						deferred.resolve(response);
+					}).catch(function(error) {
+						$log.error(error.message);
+						$scope.stripe_error_message = error.message;
 					});
+					return deferred.promise;
 				}
-				return deferred.promise;
 			};
 
 			$scope.resetStripeToken = function() {
-				$scope.data = $scope.data || {payment_method: {}};
-				$scope.data.payment_method.payment_data = {};
+				$scope.payment_method.payment_data = {};
 				$scope.dismiss();
 			};
 
