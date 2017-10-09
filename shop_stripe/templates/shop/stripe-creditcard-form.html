@@ -17,7 +17,7 @@
 	</div>
 {% endblock panel_heading %}
 	<div class="panel-body">
-		<form role="form" stripe-card-form novalidate{% if SHOP_STRIPE_PREFILL %} ng-init="payment={card: {name: 'John Doe', number: '4242 4242 4242 4242', exp_month: '01', exp_year: '2020', cvc: '123'}}"{% endif %}>
+		<form role="form" name="stripe_card_form" stripe-card-form novalidate{% if SHOP_STRIPE_PREFILL %} ng-init="payment={card: {name: 'John Doe', number: '4242 4242 4242 4242', exp_month: '01', exp_year: '2020', cvc: '123'}}"{% endif %}>
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="alert alert-success" ng-show="stripe_success_message" ng-cloak>
