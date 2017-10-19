@@ -36,7 +36,7 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 				return function(response) {
 					var deferred;
 					if ($scope.payment_method.payment_modifier !== 'stripe-payment'
-					  || angular.isString($scope.payment_method.payment_data.token_id))
+					  || angular.isObject($scope.payment_method.payment_data))
 						return $q.resolve(response);
 
 					// pass data from Stripe Card Form to PSP and fetch the token
@@ -49,13 +49,14 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 					}).catch(function(error) {
 						$log.error(error.message);
 						$scope.stripe_error_message = error.message;
+						deferred.reject(response);
 					});
 					return deferred.promise;
 				}
 			};
 
 			$scope.resetStripeToken = function() {
-				$scope.payment_method.payment_data = {};
+				$scope.payment_method.payment_data = null;
 				$scope.dismiss();
 			};
 
