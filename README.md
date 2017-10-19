@@ -44,6 +44,11 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.12
+* Switch to django-SHOP versioning scheme, so that versions are in sync.
+* Adopted to django-angular version 2.0.
+* Add support for payment refundings.
+
 ### 0.3.3, 0.3.4
 * Added compatibility on creating and populating Order for django-SHOP-0.11.
 
