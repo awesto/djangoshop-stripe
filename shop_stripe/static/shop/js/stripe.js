@@ -65,7 +65,11 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 			};
 
 			$scope.resetStripeToken();
-		}]
+		}],
+		link: function(scope, element) {
+			if (!angular.isObject(scope.payment_method))
+				throw new Error("Local scope can not manage the Payment Method Form. Did you forget to wrap it into a 'Set of Forms' plugin?");
+		}
 	};
 }]);
 
