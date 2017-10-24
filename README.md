@@ -17,6 +17,19 @@ for django-shop version 0.10.x:
 pip install djangoshop-stripe==0.2.0
 ```
 
+for django-shop version 0.11.x:
+
+```
+pip install djangoshop-stripe==0.3.4
+```
+
+for django-shop version 0.12.x:
+
+```
+pip install djangoshop-stripe==0.12
+```
+
+
 ## Configuration
 
 In ``settings.py`` of the merchant's project:
