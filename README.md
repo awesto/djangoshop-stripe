@@ -57,6 +57,9 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 0.12.1
+* Adopted import path of **django-shop**'s ``PaymentProvider`` and ``PaymentModifier``.
+
 ### 0.12
 * Switch to django-SHOP versioning scheme, so that versions are in sync.
 * Adopted to django-angular version 2.0.
