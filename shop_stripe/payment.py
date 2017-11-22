@@ -14,7 +14,7 @@ import stripe
 from shop import __version__ as SHOP_VERSION
 from shop.models.order import BaseOrder, OrderModel, OrderPayment
 from shop.money import MoneyMaker
-from shop.payment.providers import PaymentProvider
+from shop.payment.base import PaymentProvider
 
 stripe.api_key = settings.SHOP_STRIPE['APIKEY']
 
