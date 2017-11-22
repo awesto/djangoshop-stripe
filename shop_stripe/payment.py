@@ -12,7 +12,7 @@ import stripe
 
 from shop.models.order import BaseOrder, OrderModel, OrderPayment
 from shop.money import MoneyMaker
-from shop.payment.base import PaymentProvider
+from shop.payment.providers import PaymentProvider
 
 stripe.api_key = settings.SHOP_STRIPE['APIKEY']
 
