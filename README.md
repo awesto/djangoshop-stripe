@@ -5,10 +5,10 @@ This integrates the Stripe for django-shop version 0.9 and above.
 
 ## Installation
 
-for django-shop version 0.9.x:
+for django-shop version 0.11.x:
 
 ```
-pip install djangoshop-stripe==0.1.4
+pip install djangoshop-stripe==0.11
 ```
 
 for django-shop version 0.10.x:
@@ -16,6 +16,13 @@ for django-shop version 0.10.x:
 ```
 pip install djangoshop-stripe==0.2.0
 ```
+
+for django-shop version 0.9.x:
+
+```
+pip install djangoshop-stripe==0.1.4
+```
+
 
 ## Configuration
 
