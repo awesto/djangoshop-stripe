@@ -5,10 +5,10 @@ This integrates the Stripe for django-shop version 0.9 and above.
 
 ## Installation
 
-for django-shop version 0.9.x:
+for django-shop version 0.11.x:
 
 ```
-pip install djangoshop-stripe==0.1.4
+pip install djangoshop-stripe==0.11
 ```
 
 for django-shop version 0.10.x:
@@ -16,6 +16,13 @@ for django-shop version 0.10.x:
 ```
 pip install djangoshop-stripe==0.2.0
 ```
+
+for django-shop version 0.9.x:
+
+```
+pip install djangoshop-stripe==0.1.4
+```
+
 
 ## Configuration
 
@@ -44,8 +51,11 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
-### 0.3.3, 0.3.4
-* Added compatibility on creating and populating Order for django-SHOP-0.11.
+### 0.3.4, 0.11
+* Changed versioning to use the same numbering scheme as django-SHOP.
+
+### 0.3.3
+ * Added compatibility on creating and populating Order for django-SHOP-0.11.
 
 ### 0.3.2
 * Fixed: Initialize scope of Angular directive `stripe-card-form` even for missing
