@@ -1,0 +1,21 @@
+form[stripe-card-form] {
+    .shopstripe-exp_dates {
+        .form-group {
+            width: 50%;
+            &:first-child {
+                padding-right: 10px;
+            }
+            &:nth-child(2) {
+                padding-left: 10px;
+            }
+            select {
+                width: 100%;
+            }
+        }
+        .form-inline {
+            .form-group {
+                display: inline-block;
+            }
+        }
+    }
+}
