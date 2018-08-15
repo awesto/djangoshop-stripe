@@ -45,6 +45,8 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 						$log.log("Token created for card ending in ", token.card.last4);
 						$scope.payment_method.payment_data = {token_id: token.id};
 						$scope.payment.card = {name: $scope.payment.card.name};  // forget credit card number immediately
+						$scope.stripe_card_form.$setSubmitted();
+
 						// emulate a response object for the next promise handler, since `stripe.card.createToken()`
 						// returns a proprietary and incompatible token object
 						response = {
@@ -61,6 +63,8 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 							$scope.stripe_card_form[fieldName].$setValidity('rejected', false);
 							$scope.stripe_card_form[fieldName].$setPristine();
 						}
+						$scope.stripe_card_form.$setSubmitted();
+
 						// emulate a response object for the next promise handler, since `stripe.card.createToken()`
 						// returns a proprietary and incompatible error object
 						response = {
