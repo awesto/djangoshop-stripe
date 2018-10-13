@@ -7,67 +7,73 @@
 {% add_data "ng-requires" "django.shop.stripe" %}
 {% addtoblock "ng-config" %}['stripeProvider', function(stripeProvider) { stripeProvider.setPublishableKey('{{ SHOP_STRIPE_PUBKEY }}'); }]{% endaddtoblock %}
 
-<div class="panel panel-default">
-{% block panel_heading %}
-	<div class="panel-heading">
-		<h2 class="panel-title">
+<div class="card">
+{% block card_heading %}
+	<div class="card-header">
+		<h5 class="card-title my-0">
 			{% trans "Payment" %}
-			<img class="pull-right" src="{% static 'shop/icons/stripe-solid-dark.png' %}" srcset="{% static 'shop/icons/stripe-solid-dark.png' %} 1x, {% static 'shop/icons/stripe-solid-dark@2x.png' %} 2x, {% static 'shop/icons/stripe-solid-dark@3x.png' %} 3x" width="119" height="26" style="margin-top: -4px;">
-		</h2>
+			<img class="pull-right my-auto" src="{% static 'shop/icons/stripe-solid-dark.png' %}" srcset="{% static 'shop/icons/stripe-solid-dark.png' %} 1x, {% static 'shop/icons/stripe-solid-dark@2x.png' %} 2x, {% static 'shop/icons/stripe-solid-dark@3x.png' %} 3x" width="119" height="26" style="margin-top: -4px;">
+		</h5>
 	</div>
-{% endblock panel_heading %}
-	<div class="panel-body">
+{% endblock card_heading %}
+	<div class="card-body">
 		<form role="form" name="stripe_card_form" stripe-card-form novalidate{% if SHOP_STRIPE_PREFILL %} ng-init="payment={card: {name: 'John Doe', number: '4242 4242 4242 4242', exp_month: '01', exp_year: '2020', cvc: '123'}}"{% endif %}>
-			<div class="row">
-				<div class="col-xs-12">
+			<div class="form-row">
+				<div class="col form-group">
 					<div class="alert alert-success" ng-show="stripe_success_message" ng-cloak>
 						<a class="close" ng-click="dismiss()">×</a>{% verbatim %}{{ success_message }}{% endverbatim %}
 					</div>
 					<div class="alert alert-danger" ng-show="stripe_error_message" ng-cloak>
 						<a class="close" ng-click="dismiss()">×</a>{% verbatim %}{{ stripe_error_message }}{% endverbatim %}
 					</div>
-					<div class="form-group">
-						<label for="card_holder">{% trans "Card Holder" %}</label>
-						<div class="input-group">
-							<input type="text" class="form-control" name="card_holder" placeholder="Card holder name" ng-model="payment.card.name" ng-change="resetStripeToken()" />
-							<span class="input-group-addon"><i class="fa fa-user"></i></span>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="card_number">{% trans "Creditcard Number" %}</label>
-						<div class="input-group">
-							<input type="text" class="form-control" name="card_number" placeholder="Valid Card Number" ng-model="payment.card.number" ng-change="resetStripeToken()" />
-							<span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+					<label for="card_holder">{% trans "Card Holder" %}</label>
+					<div class="input-group">
+						<input type="text" class="form-control" name="card_holder" placeholder="Card holder name" ng-model="payment.card.name" ng-change="resetStripeToken()" />
+						<div class="input-group-append">
+							<span class="input-group-text"><i class="fa fa-user"></i></span>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-xs-8 col-md-6">
-					<label>{% trans "Expiration Date" %}</label>
-					<div class="form-group">
-						<div class="col-xs-6" style="padding-left: 0;">
-							<select class="form-control" name="exp_month" ng-model="payment.card.exp_month" ng-change="resetStripeToken()">
-								<option value="" selected="selected" disabled="disabled">{% trans "Month" %}</option>
-							{% for mm, month_name in payment_modifiers.month_range %}
-								<option value="{{ mm }}">{{ mm }} / {{ month_name }}</option>
-							{% endfor %}
-							</select>
-						</div>
-						<div class="col-xs-6" style="padding-left: 0;">
-							<select class="form-control" name="exp_year" ng-model="payment.card.exp_year" ng-change="resetStripeToken()">
-								<option value="" selected="selected" disabled="disabled">{% trans "Year" %}</option>
-							{% for year in payment_modifiers.years_range %}
-								<option value="{{ year|unlocalize }}">{{ year|unlocalize }}</option>
-							{% endfor %}
-							</select>
+			<div class="form-row">
+				<div class="col form-group">
+					<label for="card_number">{% trans "Creditcard Number" %}</label>
+					<div class="input-group">
+						<input type="text" class="form-control" name="card_number" placeholder="Valid Card Number" ng-model="payment.card.number" ng-change="resetStripeToken()" />
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<i class="fa fa fa-cc-visa mr-1"></i>
+								<i class="fa fa fa-cc-mastercard"></i>
+							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-xs-4 col-md-3 pull-right">
+			</div>
+			<div class="form-row">
+				<div class="col-6 form-group">
+					<label>{% trans "Expiration Date" %}</label>
+					<div class="w-100 d-flex">
+						<select class="form-control w-50 d-inline-flex mr-1" name="exp_month" ng-model="payment.card.exp_month" ng-change="resetStripeToken()">
+							<option value="" selected="selected" disabled="disabled">{% trans "Month" %}</option>
+						{% for mm, month_name in payment_modifiers.month_range %}
+							<option value="{{ mm }}">{{ mm }} / {{ month_name }}</option>
+						{% endfor %}
+						</select>
+						<select class="form-control w-50 d-inline-flex ml-1" name="exp_year" ng-model="payment.card.exp_year" ng-change="resetStripeToken()">
+							<option value="" selected="selected" disabled="disabled">{% trans "Year" %}</option>
+						{% for year in payment_modifiers.years_range %}
+							<option value="{{ year|unlocalize }}">{{ year|unlocalize }}</option>
+						{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="col form-group offset-md-3">
 					<label for="cvc">{% trans "Security Code" %}</label>
-					<div class="form-group">
+					<div class="input-group">
 						<input type="password" class="form-control" name="cvc" placeholder="CVC" ng-model="payment.card.cvc"  ng-change="resetStripeToken()" />
+						<div class="input-group-append">
+							<div class="input-group-text"><i class="fa fa-credit-card"></i></div>
+						</div>
 					</div>
 				</div>
 			</div>
