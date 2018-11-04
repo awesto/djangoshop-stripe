@@ -20,26 +20,27 @@
 		<form role="form" name="stripe_card_form" stripe-card-form novalidate{% if SHOP_STRIPE_PREFILL %} ng-init="payment={card: {name: 'John Doe', number: '4242 4242 4242 4242', exp_month: '01', exp_year: '2020', cvc: '123'}}"{% endif %}>
 			<div class="form-row">
 				<div class="col form-group">
-					<div class="alert alert-success" ng-show="stripeSuccessMessage" ng-cloak>
-						{% verbatim %}{{ stripeSuccessMessage }}{% endverbatim %}
-					</div>
-					<div class="alert alert-danger" ng-show="stripeErrorMessage" ng-cloak>
-						{% verbatim %}{{ stripeErrorMessage }}{% endverbatim %}
-					</div>
 					<label for="card_holder">{% trans "Card Holder" %}</label>
 					<div class="input-group">
-						<input id="id_card[holder]" type="text" class="form-control" name="card[holder]" placeholder="Card holder name" ng-model="payment.card.name" ng-change="resetStripeToken('card[holder]')" ng-required />
+						<input id="id_holder" type="text" class="form-control" name="holder" placeholder="{% trans 'Card holder name' %}" ng-model="payment.card.name" ng-required="true" />
 						<div class="input-group-append">
 							<span class="input-group-text"><i class="fa fa-user"></i></span>
 						</div>
 					</div>
+					<ul ng-show="stripe_card_form.holder.$touched" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+						<li ng-show="stripe_card_form.holder.$error.required" class="invalid">{% trans "This field is required." %}</li>
+						<li ng-show="stripe_card_form.holder.$valid" class="valid"></li>
+					</ul>
+					<ul ng-show="stripe_card_form.holder.$pristine" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+						<li ng-show="stripe_card_form.holder.$error.rejected" class="invalid" ng-bind="stripe_card_form.holder.$message"></li>
+					</ul>
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="col form-group">
 					<label for="card_number">{% trans "Creditcard Number" %}</label>
 					<div class="input-group">
-						<input id="id_card[number]" type="text" class="form-control" name="card[number]" placeholder="Valid Card Number" ng-model="payment.card.number" ng-change="resetStripeToken('card[number]')"  ng-required />
+						<input id="id_number" type="text" class="form-control" name="number" placeholder="Valid Card Number" ng-model="payment.card.number" ng-required="true" />
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<i class="fa fa fa-cc-visa mr-1"></i>
@@ -47,34 +48,55 @@
 							</div>
 						</div>
 					</div>
+					<ul ng-show="stripe_card_form.number.$dirty" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+						<li ng-show="stripe_card_form.number.$error.required" class="invalid">{% trans "This field is required." %}</li>
+						<li ng-show="stripe_card_form.number.$valid" class="valid"></li>
+					</ul>
+					<ul ng-show="stripe_card_form.number.$pristine" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+						<li ng-show="stripe_card_form.number.$error.rejected" class="invalid" ng-bind="stripe_card_form.number.$message"></li>
+					</ul>
 				</div>
 			</div>
 			<div class="form-row">
 				<div class="col-6 form-group">
 					<label>{% trans "Expiration Date" %}</label>
 					<div class="w-100 d-flex">
-						<select id="id_card[exp_month]" class="form-control w-50 d-inline-flex mr-1" name="card[exp_month]" ng-model="payment.card.exp_month" ng-change="resetStripeToken('card[exp_month]')"  ng-required>
+						<select id="id_exp_month" class="form-control w-50 d-inline-flex mr-1" name="exp_month" ng-model="payment.card.exp_month" ng-required="true">
 							<option value="" selected="selected" disabled="disabled">{% trans "Month" %}</option>
 						{% for mm, month_name in payment_modifiers.month_range %}
 							<option value="{{ mm }}">{{ mm }} / {{ month_name }}</option>
 						{% endfor %}
 						</select>
-						<select id="id_card[exp_year]" class="form-control w-50 d-inline-flex ml-1" name="card[exp_year]" ng-model="payment.card.exp_year" ng-change="resetStripeToken('card[exp_year]')" ng-required>
+						<select id="id_exp_year" class="form-control w-50 d-inline-flex ml-1" name="exp_year" ng-model="payment.card.exp_year" ng-required="true">
 							<option value="" selected="selected" disabled="disabled">{% trans "Year" %}</option>
 						{% for year in payment_modifiers.years_range %}
 							<option value="{{ year|unlocalize }}">{{ year|unlocalize }}</option>
 						{% endfor %}
 						</select>
+						<ul ng-show="stripe_card_form.exp_month.$touched && stripe_card_form.exp_year.$touched" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+							<li ng-show="stripe_card_form.exp_month.$valid && stripe_card_form.exp_year.$valid" class="valid"></li>
+						</ul>
+						<ul ng-show="stripe_card_form.exp_month.$pristine || stripe_card_form.exp_year.$pristine" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+							<li ng-show="stripe_card_form.exp_month.$error.rejected" class="invalid" ng-bind="stripe_card_form.exp_month.$message"></li>
+							<li ng-show="stripe_card_form.exp_year.$error.rejected" class="invalid" ng-bind="stripe_card_form.exp_year.$message"></li>
+						</ul>
 					</div>
 				</div>
 				<div class="col form-group offset-md-3">
 					<label for="cvc">{% trans "Security Code" %}</label>
 					<div class="input-group">
-						<input id="id_card[cvc]" type="password" class="form-control" name="card[cvc]" placeholder="CVC" ng-model="payment.card.cvc"  ng-change="resetStripeToken('card[cvc]')"  ng-required />
+						<input id="id_cvc" type="password" class="form-control" name="cvc" placeholder="CVC" ng-model="payment.card.cvc" ng-required="true" />
 						<div class="input-group-append">
 							<div class="input-group-text"><i class="fa fa-credit-card"></i></div>
 						</div>
 					</div>
+					<ul ng-show="stripe_card_form.cvc.$touched" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+						<li ng-show="stripe_card_form.cvc.$error.required" class="invalid">{% trans "This field is required." %}</li>
+						<li ng-show="stripe_card_form.cvc.$valid" class="valid"></li>
+					</ul>
+					<ul ng-show="stripe_card_form.cvc.$pristine" class="djng-form-control-feedback djng-field-errors" ng-cloak>
+						<li ng-show="stripe_card_form.cvc.$error.rejected" class="invalid" ng-bind="stripe_card_form.cvc.$message"></li>
+					</ul>
 				</div>
 			</div>
 		</form>

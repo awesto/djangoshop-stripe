@@ -18,7 +18,10 @@ CLASSIFIERS = [
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Operating System :: OS Independent',
-    'Programming Language :: Python',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
     'Topic :: Software Development :: Libraries :: Application Frameworks',
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
 ]
@@ -36,6 +39,7 @@ setup(
     classifiers=CLASSIFIERS,
     install_requires=[
         'stripe>=1.53.0,<1.54',
+        'django-shop>=0.12,<0.13',
     ],
     packages=find_packages(),
     include_package_data=True,
