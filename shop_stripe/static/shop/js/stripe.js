@@ -48,7 +48,7 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 						deferred.resolve(response);
 					}).catch(function(error) {
 						$log.error(error.message);
-						$scope.stripe_error_message = error.message;
+						$scope.stripeErrorMessage = error.message;
 						deferred.reject(response);
 					});
 					return deferred.promise;
@@ -61,7 +61,7 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 			};
 
 			$scope.dismiss = function() {
-				$scope.stripe_error_message = $scope.stripe_success_message = null;
+				$scope.stripeErrorMessage = $scope.stripeSuccessMessage = null;
 			};
 
 			$scope.resetStripeToken();

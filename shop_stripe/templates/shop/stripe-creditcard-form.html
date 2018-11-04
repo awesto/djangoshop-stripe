@@ -20,11 +20,11 @@
 		<form role="form" name="stripe_card_form" stripe-card-form novalidate{% if SHOP_STRIPE_PREFILL %} ng-init="payment={card: {name: 'John Doe', number: '4242 4242 4242 4242', exp_month: '01', exp_year: '2020', cvc: '123'}}"{% endif %}>
 			<div class="form-row">
 				<div class="col form-group">
-					<div class="alert alert-success" ng-show="stripe_success_message" ng-cloak>
-						<a class="close" ng-click="dismiss()">×</a>{% verbatim %}{{ success_message }}{% endverbatim %}
+					<div class="alert alert-success" ng-show="stripeSuccessMessage" ng-cloak>
+						<a class="close" ng-click="dismiss()">×</a>{% verbatim %}{{ stripeSuccessMessage }}{% endverbatim %}
 					</div>
-					<div class="alert alert-danger" ng-show="stripe_error_message" ng-cloak>
-						<a class="close" ng-click="dismiss()">×</a>{% verbatim %}{{ stripe_error_message }}{% endverbatim %}
+					<div class="alert alert-danger" ng-show="stripeErrorMessage" ng-cloak>
+						<a class="close" ng-click="dismiss()">×</a>{% verbatim %}{{ stripeErrorMessage }}{% endverbatim %}
 					</div>
 					<label for="card_holder">{% trans "Card Holder" %}</label>
 					<div class="input-group">
