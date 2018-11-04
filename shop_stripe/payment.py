@@ -3,9 +3,10 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.text import force_text, format_lazy
 from django.utils.translation import ugettext_lazy as _
 
-from django_fsm import transition, RETURN_VALUE
+from django_fsm import transition
 from rest_framework.exceptions import ValidationError
 import stripe
 
@@ -31,8 +32,10 @@ class StripePayment(PaymentProvider):
             thank_you_url = OrderModel.objects.get_latest_url()
             js_expression = 'window.location.href="{}";'.format(thank_you_url)
             return js_expression
-        except (KeyError, stripe.error.StripeError) as err:
-            raise ValidationError(err)
+        except stripe.error.StripeError as err:
+            raise ValidationError(err._message)
+        except KeyError as err:
+            raise ValidationError(str(err))
 
     def charge(self, cart, request):
         """
@@ -40,7 +43,11 @@ class StripePayment(PaymentProvider):
         This view is invoked by the Javascript function `scope.charge()` delivered
         by `get_payment_request`.
         """
-        token_id = cart.extra['payment_extra_data']['token_id']
+        token_id = cart.extra['payment_extra_data'].get('token_id')
+        if not token_id:
+            message = _("Stripe payment token is missing")
+            raise stripe.error.StripeError(message)
+
         order = OrderModel.objects.create_from_cart(cart, request)
         charge = stripe.Charge.create(
             amount=cart.total.as_integer(),
@@ -55,8 +62,8 @@ class StripePayment(PaymentProvider):
             order.save()
 
         if charge['status'] != 'succeeded':
-            msg = "Stripe returned status '{status}' for id: {id}"
-            raise stripe.error.InvalidRequestError(msg.format(**charge))
+            message = _("Stripe returned status '{status}' for id: {id}")
+            raise stripe.error.StripeError(format_lazy(message, **charge))
 
 
 class OrderWorkflowMixin(object):
