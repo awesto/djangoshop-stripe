@@ -47,24 +47,26 @@ module.directive('stripeCardForm', ['$http', '$log', '$q', 'stripe', function($h
 						$scope.payment.card = {name: $scope.payment.card.name};  // forget credit card number immediately
 						deferred.resolve(response);
 					}).catch(function(error) {
-						$log.error(error.message);
+						var stripe_card_form = {};
+						$log.log("Stripe rejected form. Reason: " + error.message);
 						$scope.stripeErrorMessage = error.message;
-						deferred.reject(response);
+						$scope.stripe_card_form[error.param].$setDirty();
+						$scope.stripe_card_form[error.param].$setValidity('rejected', false);
+						stripe_card_form[error.param] = error.message;
+						deferred.reject({status: 422, data: {stripe_card_form: stripe_card_form}});
 					});
 					return deferred.promise;
 				}
 			};
 
-			$scope.resetStripeToken = function() {
+			$scope.resetStripeToken = function(field) {
 				$scope.payment_method.payment_data = null;
+				$scope.stripeErrorMessage = $scope.stripeSuccessMessage = null;
+				$scope.stripe_card_form[field].$setValidity('rejected', true);
 				$scope.dismiss();
 			};
 
-			$scope.dismiss = function() {
-				$scope.stripeErrorMessage = $scope.stripeSuccessMessage = null;
-			};
-
-			$scope.resetStripeToken();
+			$scope.dismiss = angular.noop;
 		}],
 		link: function(scope, element) {
 			if (!angular.isObject(scope.payment_method))
