@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from datetime import date
 from django.utils.translation import ugettext_lazy as _
-from shop.modifiers.base import PaymentModifier
+from shop.payment.modifiers import PaymentModifier
 from .payment import StripePayment
 
 
