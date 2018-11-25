@@ -136,6 +136,17 @@ angular.forEach(['input', 'select'], function(element) {
 					// reset payment data
 					scope.payment_method.payment_data = null;
 				});
+
+				if (attrs.name === 'number') {
+					element.on('blur', function(event) {
+						var elem = angular.element(this);
+						var number = elem.val().replace(/[^0-9]/g, ''), bits = [];
+						for (var k = 0; k<number.length; k += 4) {
+							bits.push(number.substr(k, 4));
+						}
+						elem.val(bits.join(' '));
+					});
+				}
 			}
 		};
 	}]);

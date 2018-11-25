@@ -40,7 +40,7 @@
 				<div class="col form-group">
 					<label for="card_number">{% trans "Creditcard Number" %}</label>
 					<div class="input-group">
-						<input id="id_number" type="text" class="form-control" name="number" placeholder="Valid Card Number" ng-model="payment.card.number" ng-required="true" />
+						<input id="id_number" type="text" class="form-control" name="number" placeholder="Valid Card Number" ng-model="payment.card.number" ng-required="true" ng-pattern="/^[0-9 ]{16,}$/" />
 						<div class="input-group-append">
 							<div class="input-group-text">
 								<i class="fa fa fa-cc-visa mr-1"></i>
@@ -85,7 +85,7 @@
 				<div class="col form-group offset-md-3">
 					<label for="cvc">{% trans "Security Code" %}</label>
 					<div class="input-group">
-						<input id="id_cvc" type="password" class="form-control" name="cvc" placeholder="CVC" ng-model="payment.card.cvc" ng-required="true" />
+						<input id="id_cvc" type="password" class="form-control" name="cvc" placeholder="CVC" ng-model="payment.card.cvc" ng-required="true" ng-pattern="/^[0-9]{3,}$/" autocomplete="off" />
 						<div class="input-group-append">
 							<div class="input-group-text"><i class="fa fa-credit-card"></i></div>
 						</div>
