@@ -7,12 +7,11 @@ from .payment import StripePayment
 
 
 class StripePaymentModifier(PaymentModifier):
-    identifier = StripePayment.namespace
     payment_provider = StripePayment()
     commision_percentage = None
 
     def get_choice(self):
-        return (self.identifier, _("Credit Card"))
+        return (self.payment_provider.namespace, _("Credit Card"))
 
     def is_disabled(self, cart):
         return cart.total == 0
@@ -25,7 +24,7 @@ class StripePaymentModifier(PaymentModifier):
             return
         amount = cart.total * Decimal(self.commision_percentage / 100.0)
         instance = {'label': _("+ {}% handling fee").format(self.commision_percentage), 'amount': amount}
-        cart.extra_rows[self.identifier] = ExtraCartRow(instance)
+        cart.extra_rows[self.payment_provider.namespace] = ExtraCartRow(instance)
         cart.total += amount
 
     def update_render_context(self, context):
