@@ -23,9 +23,8 @@ class StripePayment(PaymentProvider):
         From the given request, add a snippet to the page.
         """
         try:
-            self.charge(cart, request)
-            thank_you_url = OrderModel.objects.get_latest_url()
-            js_expression = 'window.location.href="{}";'.format(thank_you_url)
+            order = self.charge(cart, request)
+            js_expression = 'window.location.href="{}";'.format(order.get_absolute_url())
             return js_expression
         except stripe.error.StripeError as err:
             raise ValidationError(err._message)
@@ -55,7 +54,7 @@ class StripePayment(PaymentProvider):
             order.populate_from_cart(cart, request)
             order.add_stripe_payment(charge)
             order.save()
-
-        if charge['status'] != 'succeeded':
+        else:
             message = _("Stripe returned status '{status}' for id: {id}")
             raise stripe.error.StripeError(format_lazy(message, **charge))
+        return order
