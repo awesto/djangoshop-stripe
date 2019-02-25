@@ -39,7 +39,7 @@ setup(
     classifiers=CLASSIFIERS,
     install_requires=[
         'stripe>=1.53.0,<1.54',
-        'django-shop>=0.12,<0.13',
+        'django-shop>=1.0,<1.1',
     ],
     packages=find_packages(),
     include_package_data=True,
