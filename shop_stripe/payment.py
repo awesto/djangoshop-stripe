@@ -53,7 +53,7 @@ class StripePayment(PaymentProvider):
         if charge['status'] == 'succeeded':
             order.populate_from_cart(cart, request)
             order.add_stripe_payment(charge)
-            order.save()
+            order.save(with_notification=True)
         else:
             message = _("Stripe returned status '{status}' for id: {id}")
             raise stripe.error.StripeError(format_lazy(message, **charge))
