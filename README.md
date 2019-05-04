@@ -1,32 +1,14 @@
 # Stripe Payment Provider Integration for django-shop
 
-This integrates the Stripe for django-shop version 0.9 and above.
+This integrates the Stripe for django-shop version 1.0 and above.
 
 
 ## Installation
 
-for django-shop version 0.9.x:
+for django-shop version 1.0.x:
 
 ```
-pip install djangoshop-stripe==0.1.4
-```
-
-for django-shop version 0.10.x:
-
-```
-pip install djangoshop-stripe==0.2.0
-```
-
-for django-shop version 0.11.x:
-
-```
-pip install djangoshop-stripe==0.3.4
-```
-
-for django-shop version 0.12.x:
-
-```
-pip install djangoshop-stripe==0.12
+pip install djangoshop-stripe<1.1
 ```
 
 
@@ -57,7 +39,16 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
-### 0.12
+### 1.0
+
+* Adopted for django-SHOP version 1.0.
+
+### 0.12.3
+
+* The Stripe credit card form, now uses the same validation techniques as all the other forms
+  in the checkout process.
+
+### 0.12 / 0.12.2 (don't use 0.12.1)
 * Switch to django-SHOP versioning scheme, so that versions are in sync.
 * Adopted to django-angular version 2.0.
 * Add support for payment refundings.
