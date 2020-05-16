@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 from django_fsm import transition
@@ -10,7 +7,7 @@ from shop.money import MoneyMaker
 from shop_stripe.payment import StripePayment
 
 
-class OrderWorkflowMixin(object):
+class OrderWorkflowMixin:
     TRANSITION_TARGETS = {
         'paid_with_stripe': _("Paid using Stripe"),
     }
@@ -19,7 +16,7 @@ class OrderWorkflowMixin(object):
         if not isinstance(self, BaseOrder):
             raise ImproperlyConfigured("class 'OrderWorkflowMixin' is not of type 'BaseOrder'")
 
-        super(OrderWorkflowMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @transition(field='status', source=['created'], target='paid_with_stripe')
     def add_stripe_payment(self, charge):
@@ -34,7 +31,7 @@ class OrderWorkflowMixin(object):
         )
 
     def is_fully_paid(self):
-        return super(OrderWorkflowMixin, self).is_fully_paid()
+        return super().is_fully_paid()
 
     @transition(field='status', source='paid_with_stripe', conditions=[is_fully_paid],
                 custom=dict(admin=True, button_name=_("Acknowledge Payment")))
@@ -64,7 +61,7 @@ class OrderWorkflowMixin(object):
         del self.amount_paid  # to invalidate the cache
         if self.amount_paid:
             # proceed with other payment service providers
-            super(OrderWorkflowMixin, self).refund_payment()
+            super().refund_payment()
 
     def cancelable(self):
-        return super(OrderWorkflowMixin, self).cancelable() or self.status in ['paid_with_stripe']
+        return super().cancelable() or self.status in ['paid_with_stripe']
