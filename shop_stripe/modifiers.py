@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from datetime import date
 from django.utils.translation import ugettext_lazy as _
 from shop.payment.modifiers import PaymentModifier
@@ -29,7 +26,7 @@ class StripePaymentModifier(PaymentModifier):
         cart.total += amount
 
     def update_render_context(self, context):
-        super(StripePaymentModifier, self).update_render_context(context)
+        super().update_render_context(context)
         today = date.today()
         context['payment_modifiers']['month_range'] = \
             [(date(2000, m, 1).strftime('%m'), date(2000, m, 1).strftime('%b')) for m in range(1, 13)]
