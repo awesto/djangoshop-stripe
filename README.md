@@ -39,6 +39,12 @@ Add ``'shop_stripe.context_processors.public_keys'`` to the list of template
 
 ## Changes
 
+### 1.2
+
+* Drop support for Python-2.
+* Recommended for django-SHOP version 1.2.
+
+
 ### 1.0
 
 * Adopted for django-SHOP version 1.0.
